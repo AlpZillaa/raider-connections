@@ -15,7 +15,7 @@ const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border z-[9999] mobile-navigation pb-safe">
+    <nav className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-md border-t border-border z-[9999] mobile-navigation" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
       <div className="flex justify-around items-center py-2 px-4 max-w-md mx-auto">
         {tabs.map(({ id, icon: Icon, label }) => (
           <Button

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { Session } from "@supabase/supabase-js";
 import Navigation from "@/components/Navigation";
 import SwipeCard from "@/components/SwipeCard";
 import BadgeSystem from "@/components/BadgeSystem";
@@ -13,12 +14,14 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import RaiderRashLogo from "@/components/RaiderRashLogo";
+import { ProfileCardSkeleton, MatchListSkeleton } from "@/components/SkeletonLoader";
 import { Heart, MessageCircle, Settings, User, Filter, LogOut } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const MainApp = () => {
   const [activeTab, setActiveTab] = useState("discover");
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
+  const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<any>(null);
   
   const navigate = useNavigate();
@@ -29,19 +32,23 @@ const MainApp = () => {
   const { badges, toggleBadgeDisplay, getDisplayedBadges } = useBadges(matches.length);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) {
+    // Set up auth state listener FIRST
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, currentSession) => {
+      setSession(currentSession);
+      setUser(currentSession?.user ?? null);
+      
+      if (!currentSession) {
         navigate("/auth");
-      } else {
-        setUser(session.user);
       }
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) {
+    // THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      setSession(currentSession);
+      setUser(currentSession?.user ?? null);
+      
+      if (!currentSession) {
         navigate("/auth");
-      } else {
-        setUser(session.user);
       }
     });
 
@@ -87,10 +94,7 @@ const MainApp = () => {
 
       <div className="flex-1 flex items-center justify-center p-4">
         {profilesLoading ? (
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-            <p className="mt-4 text-muted-foreground">Loading profiles...</p>
-          </div>
+          <ProfileCardSkeleton />
         ) : profiles[currentProfileIndex] ? (
           <SwipeCard 
             profile={{
@@ -126,9 +130,7 @@ const MainApp = () => {
       
       <div className="space-y-4 px-4">
         {matchesLoading ? (
-          <div className="text-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-          </div>
+          <MatchListSkeleton />
         ) : matches.length === 0 ? (
           <div className="text-center py-12 space-y-2">
             <div className="text-4xl">💔</div>
@@ -402,6 +404,14 @@ const MainApp = () => {
       default: return renderDiscoverTab();
     }
   };
+
+  if (!session || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
