@@ -209,71 +209,77 @@ const MainApp = () => {
 
           {/* Action Buttons */}
           <div className="flex items-center gap-6 w-full max-w-md justify-center">
-            <Button
-              variant="ghost"
-              size="lg"
-              className="flex flex-col gap-2 h-auto py-4"
-              onClick={() => {
+            <button
+              type="button"
+              className="flex flex-col items-center gap-2 py-4 touch-target cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 toast({
                   title: "Settings",
                   description: "Settings page coming soon!",
                 });
               }}
             >
-              <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80 transition-all">
                 <Settings className="w-6 h-6 text-muted-foreground" />
               </div>
               <span className="text-xs text-muted-foreground uppercase">Settings</span>
-            </Button>
+            </button>
 
-            <Button
-              variant="default"
-              size="lg"
-              className="flex flex-col gap-2 h-auto py-4 bg-primary hover:bg-primary/90"
-              onClick={() => {
+            <button
+              type="button"
+              className="flex flex-col items-center gap-2 py-4 touch-target cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 toast({
                   title: "Add Media",
                   description: "Photo upload coming soon!",
                 });
               }}
             >
-              <div className="w-16 h-16 rounded-full bg-primary shadow-lg flex items-center justify-center relative">
+              <div className="w-16 h-16 rounded-full bg-primary shadow-lg flex items-center justify-center relative hover:bg-primary/90 transition-all">
                 <Heart className="w-7 h-7 text-white fill-white" />
                 <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white shadow-md flex items-center justify-center">
                   <span className="text-primary font-bold text-lg">+</span>
                 </div>
               </div>
               <span className="text-xs text-white uppercase font-semibold">Add Media</span>
-            </Button>
+            </button>
 
-            <Button
-              variant="ghost"
-              size="lg"
-              className="flex flex-col gap-2 h-auto py-4"
-              onClick={() => {
+            <button
+              type="button"
+              className="flex flex-col items-center gap-2 py-4 touch-target cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 toast({
                   title: "Edit Profile",
                   description: "Profile editing coming soon!",
                 });
               }}
             >
-              <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80 transition-all">
                 <User className="w-6 h-6 text-muted-foreground" />
               </div>
               <span className="text-xs text-muted-foreground uppercase">Edit Info</span>
-            </Button>
+            </button>
           </div>
 
           {/* Logout Button */}
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={handleLogout}
-            className="flex items-center gap-2 text-muted-foreground"
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleLogout();
+            }}
+            className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg text-muted-foreground hover:bg-muted/50 transition-all touch-target cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
             Logout
-          </Button>
+          </button>
 
           {/* Photo Tip Banner */}
           <div className="w-full max-w-md">
@@ -281,13 +287,20 @@ const MainApp = () => {
               <p className="text-white font-medium">
                 Photo Tip: A smile should get their attention
               </p>
-              <Button
-                size="icon"
-                variant="ghost"
-                className="bg-white/20 hover:bg-white/30 text-white rounded-full"
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toast({
+                    title: "Add Photos",
+                    description: "Photo upload feature coming soon!",
+                  });
+                }}
+                className="w-10 h-10 bg-white/20 hover:bg-white/30 text-white rounded-full flex items-center justify-center touch-target cursor-pointer transition-all"
               >
                 <span className="text-xl">+</span>
-              </Button>
+              </button>
             </div>
           </div>
 
@@ -320,9 +333,20 @@ const MainApp = () => {
               <div className="text-4xl">🔥</div>
               <h3 className="text-xl font-bold">Get Raider Rash Premium</h3>
               <p className="text-muted-foreground">See who Likes You & more!</p>
-              <Button className="w-full" size="lg">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toast({
+                    title: "Premium Coming Soon!",
+                    description: "Premium features will be available soon!",
+                  });
+                }}
+                className="w-full h-11 bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg font-semibold touch-target cursor-pointer transition-all"
+              >
                 GET PREMIUM
-              </Button>
+              </button>
             </CardContent>
           </Card>
 
