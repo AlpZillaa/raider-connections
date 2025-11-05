@@ -1,4 +1,4 @@
-import { Heart, MessageCircle, User, MapPin, Trophy } from "lucide-react";
+import { Heart, MessageCircle, User, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface NavigationProps {
@@ -10,7 +10,6 @@ const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
   const tabs = [
     { id: "discover", icon: Heart, label: "Discover" },
     { id: "matches", icon: MessageCircle, label: "Matches" },
-    { id: "hotspots", icon: MapPin, label: "Hotspots" },
     { id: "badges", icon: Trophy, label: "Badges" },
     { id: "profile", icon: User, label: "Profile" },
   ];

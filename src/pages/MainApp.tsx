@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import RaiderRashLogo from "@/components/RaiderRashLogo";
-import { Heart, MessageCircle, MapPin, Settings, User, Filter, LogOut } from "lucide-react";
+import { Heart, MessageCircle, Settings, User, Filter, LogOut } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const MainApp = () => {
@@ -164,30 +164,6 @@ const MainApp = () => {
             </Button>
           ))
         )}
-      </div>
-    </div>
-  );
-
-  const renderHotspotsTab = () => (
-    <div className="min-h-screen overflow-y-auto pb-20">
-      <div className="flex items-center justify-between p-4 mb-6">
-        <h2 className="text-2xl font-bold">Campus Hotspots</h2>
-        <MapPin className="w-6 h-6 text-primary" />
-      </div>
-      
-      <div className="space-y-4 px-4">
-        {mockHotspots.map((spot) => (
-          <div key={spot.id} className="gradient-card p-4 rounded-lg">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="font-semibold">{spot.name}</h3>
-              <Badge variant="secondary">{spot.activeUsers} active</Badge>
-            </div>
-            <p className="text-sm text-muted-foreground mb-3">{spot.description}</p>
-            <Button variant="outline" size="sm" className="w-full">
-              Check In Here
-            </Button>
-          </div>
-        ))}
       </div>
     </div>
   );
@@ -372,13 +348,6 @@ const MainApp = () => {
     );
   };
 
-  const mockHotspots = [
-    { id: "1", name: "Student Union Building", description: "Great place to meet between classes", activeUsers: 23 },
-    { id: "2", name: "Rec Center", description: "Work out and meet fitness enthusiasts", activeUsers: 15 },
-    { id: "3", name: "Library Study Rooms", description: "Find study partners for your major", activeUsers: 8 },
-    { id: "4", name: "Jones AT&T Stadium", description: "Game day connections!", activeUsers: 156 },
-  ];
-
   const renderChatTab = () => (
     <div className="min-h-screen overflow-y-auto pb-20">
       <div className="flex items-center justify-between p-4 mb-6 border-b">
@@ -427,7 +396,6 @@ const MainApp = () => {
     switch (activeTab) {
       case "discover": return renderDiscoverTab();
       case "matches": return renderMatchesTab();
-      case "hotspots": return renderHotspotsTab();
       case "badges": return renderBadgesTab();
       case "profile": return renderProfileTab();
       case "chat": return renderChatTab();
