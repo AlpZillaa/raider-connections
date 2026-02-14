@@ -12,19 +12,28 @@ export interface Profile {
   interests: string[] | null;
 }
 
-export const useProfiles = () => {
+export type ProfileFilters = {
+  minAge?: number;
+  maxAge?: number;
+  major?: string;
+  year?: string;
+  interests?: string[];
+  query?: string; // name search
+};
+
+export const useProfiles = (filters?: ProfileFilters) => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchProfiles();
-  }, []);
+    fetchProfiles(filters);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(filters)]);
 
-  const fetchProfiles = async () => {
+  const fetchProfiles = async (appliedFilters?: ProfileFilters) => {
     try {
       setLoading(true);
-      
       // Get current user
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
@@ -48,18 +57,45 @@ export const useProfiles = () => {
 
       const swipedProfileIds = swipedIds?.map(s => s.swiped_id) || [];
 
-      // Fetch profiles excluding already swiped and current user
+      // Get blocked users
+      const { data: blockedIds } = await supabase
+        .from('blocked_users')
+        .select('blocked_id')
+        .eq('blocker_id', currentProfile.id);
+
+      const blockedProfileIds = blockedIds?.map(b => b.blocked_id) || [];
+
+      // Combine all IDs to exclude
+      const excludeIds = [...new Set([...swipedProfileIds, ...blockedProfileIds])];
+
+      // Base query: verified profiles excluding current user
       let query = supabase
         .from('profiles')
         .select('*')
-        .neq('id', currentProfile.id);
-      
-      // Only filter by swiped IDs if there are any
-      if (swipedProfileIds.length > 0) {
-        query = query.not('id', 'in', `(${swipedProfileIds.join(',')})`);
+        .neq('id', currentProfile.id)
+        .eq('photo_verified', true);
+
+      // Exclude swiped/blocked
+      if (excludeIds.length > 0) {
+        query = query.not('id', 'in', `(${excludeIds.join(',')})`);
       }
-      
-      const { data, error } = await query.limit(20);
+
+      // Apply filters
+      if (appliedFilters) {
+        const { minAge, maxAge, major, year, interests, query: q } = appliedFilters;
+        if (typeof minAge === 'number') query = query.gte('age', minAge);
+        if (typeof maxAge === 'number') query = query.lte('age', maxAge);
+        if (major && major.trim()) query = query.ilike('major', `%${major.trim()}%`);
+        if (year && year.trim()) query = query.eq('year', year.trim());
+        if (interests && interests.length > 0) {
+          // profiles.interests is stored as text[] - use cs (contains) operator
+          const interestsArray = interests.map((i) => `'${i.trim()}'`).join(',');
+          query = query.filter('interests', 'cs', `{${interests.map(i => i.trim()).join(',')}}`);
+        }
+        if (q && q.trim()) query = query.ilike('display_name', `%${q.trim()}%`);
+      }
+
+      const { data, error } = await query.limit(40);
 
       if (error) throw error;
       setProfiles(data || []);

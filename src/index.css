@@ -8,50 +8,53 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Texas Tech Raider Rash Theme - Light Mode */
-    --background: 0 0% 98%;
-    --foreground: 0 0% 5%;
+    /* Modern Dating App Theme - Light Mode (Inspired by Tinder & Bumble) */
+    --background: 0 0% 99%;
+    --foreground: 0 0% 8%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 5%;
+    --card-foreground: 0 0% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 5%;
+    --popover-foreground: 0 0% 8%;
 
-    /* Texas Tech Red as primary */
-    --primary: 0 100% 40%;
+    /* Modern vibrant primary - Tinder-inspired */
+    --primary: 355 100% 52%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 15%;
+    --secondary: 0 0% 20%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 0 0% 95%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 50%;
 
-    --accent: 0 100% 40%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 41 96% 56%;
+    --accent-foreground: 0 0% 8%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 92%;
-    --ring: 0 100% 40%;
+    --border: 0 0% 88%;
+    --input: 0 0% 91%;
+    --ring: 355 100% 52%;
 
-    /* Texas Tech specific colors */
-    --ttu-red: 0 100% 40%;
-    --ttu-black: 0 0% 5%;
-    --ttu-gray: 0 0% 50%;
+    /* Modern color palette */
+    --success: 142 71% 45%;
+    --warning: 41 96% 56%;
+    --error: 355 100% 52%;
 
     /* Gradients for visual appeal */
-    --gradient-primary: linear-gradient(135deg, hsl(0 100% 40%), hsl(0 80% 35%));
-    --gradient-dark: linear-gradient(135deg, hsl(0 0% 5%), hsl(0 0% 15%));
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(0 0% 96%));
+    --gradient-primary: linear-gradient(135deg, hsl(355 100% 52%), hsl(334 100% 45%));
+    --gradient-accent: linear-gradient(135deg, hsl(41 96% 56%), hsl(32 98% 50%));
+    --gradient-dark: linear-gradient(135deg, hsl(0 0% 8%), hsl(0 0% 18%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(0 0% 99%));
+    --gradient-premium: linear-gradient(135deg, hsl(41 96% 56%), hsl(20 98% 52%));
 
-    /* Shadows with TTU branding */
-    --shadow-red: 0 10px 25px -5px hsl(0 100% 40% / 0.3);
-    --shadow-dark: 0 10px 25px -5px hsl(0 0% 5% / 0.4);
-    --shadow-glow: 0 0 20px hsl(0 100% 40% / 0.5);
+    /* Modern soft shadows */
+    --shadow-primary: 0 8px 24px -2px hsl(355 100% 52% / 0.25);
+    --shadow-light: 0 4px 12px -2px hsl(0 0% 0% / 0.08);
+    --shadow-medium: 0 10px 28px -4px hsl(0 0% 0% / 0.12);
+    --shadow-glow: 0 0 28px hsl(355 100% 52% / 0.35);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -70,39 +73,41 @@ All colors MUST be HSL.
   }
 
   .dark {
-    /* Texas Tech Raider Rash Theme - Dark Mode */
-    --background: 0 0% 5%;
-    --foreground: 0 0% 98%;
+    /* Modern Dating App Theme - Dark Mode */
+    --background: 0 0% 6%;
+    --foreground: 0 0% 96%;
 
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 96%;
 
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 96%;
 
-    --primary: 0 100% 50%;
-    --primary-foreground: 0 0% 5%;
+    --primary: 355 100% 58%;
+    --primary-foreground: 0 0% 8%;
 
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 0 0% 25%;
+    --secondary-foreground: 0 0% 96%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 65%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 0 100% 50%;
-    --accent-foreground: 0 0% 5%;
+    --accent: 41 96% 60%;
+    --accent-foreground: 0 0% 8%;
 
-    --destructive: 0 62.8% 50%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 72% 56%;
+    --destructive-foreground: 0 0% 96%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 15%;
-    --ring: 0 100% 50%;
+    --border: 0 0% 22%;
+    --input: 0 0% 16%;
+    --ring: 355 100% 58%;
 
-    /* Dark mode gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(0 100% 50%), hsl(0 80% 40%));
-    --gradient-dark: linear-gradient(135deg, hsl(0 0% 5%), hsl(0 0% 12%));
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 8%), hsl(0 0% 12%));
+    /* Dark mode modern gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(355 100% 58%), hsl(334 100% 48%));
+    --gradient-accent: linear-gradient(135deg, hsl(41 96% 60%), hsl(32 98% 52%));
+    --gradient-dark: linear-gradient(135deg, hsl(0 0% 6%), hsl(0 0% 15%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 10%), hsl(0 0% 14%));
+    --gradient-premium: linear-gradient(135deg, hsl(41 96% 60%), hsl(20 98% 54%));
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -168,12 +173,16 @@ All colors MUST be HSL.
     background: var(--gradient-card);
   }
 
-  .shadow-red {
-    box-shadow: var(--shadow-red);
+  .shadow-primary {
+    box-shadow: var(--shadow-primary);
   }
 
-  .shadow-dark {
-    box-shadow: var(--shadow-dark);
+  .shadow-light {
+    box-shadow: var(--shadow-light);
+  }
+
+  .shadow-medium {
+    box-shadow: var(--shadow-medium);
   }
 
   .shadow-glow {
@@ -199,9 +208,10 @@ All colors MUST be HSL.
 
   /* Swipe card styling */
   .swipe-card {
-    @apply relative overflow-hidden rounded-2xl shadow-dark;
+    @apply relative overflow-hidden rounded-3xl shadow-lg;
     background: var(--gradient-card);
     transform-style: preserve-3d;
+    border: 1px solid var(--border);
     /* Performance optimizations for mobile */
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
@@ -216,7 +226,7 @@ All colors MUST be HSL.
   }
 
   @keyframes matchGlow {
-    0%, 100% { box-shadow: var(--shadow-red); }
+    0%, 100% { box-shadow: var(--shadow-primary); }
     50% { box-shadow: var(--shadow-glow); }
   }
 
@@ -226,8 +236,8 @@ All colors MUST be HSL.
   }
 
   @keyframes pulseRed {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
   }
 
   /* Mobile-specific optimizations */

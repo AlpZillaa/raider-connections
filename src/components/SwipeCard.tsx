@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { MapPin, GraduationCap } from "lucide-react";
+import { MapPin, GraduationCap, X, Heart, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -14,6 +14,7 @@ interface SwipeCardProps {
     interests: string[];
     images: string[];
     distance?: string;
+    last_active?: string | null;
   };
   onSwipe: (direction: "left" | "right") => void;
 }
@@ -33,11 +34,11 @@ const SwipeCard = ({ profile, onSwipe }: SwipeCardProps) => {
 
   return (
     <div className={`swipe-card w-full max-w-sm mx-auto transform transition-all duration-300 no-select ${
-      isLiked === true ? "scale-110 rotate-12" : 
-      isLiked === false ? "scale-110 -rotate-12" : ""
+      isLiked === true ? "scale-105 rotate-6 opacity-75" : 
+      isLiked === false ? "scale-105 -rotate-6 opacity-75" : ""
     }`}>
       {/* Image Section */}
-      <div className="relative h-96 bg-muted">
+      <div className="relative h-96 bg-muted overflow-hidden">
         {profile.images[currentImageIndex] ? (
           <img 
             src={profile.images[currentImageIndex]} 
@@ -50,78 +51,125 @@ const SwipeCard = ({ profile, onSwipe }: SwipeCardProps) => {
           </div>
         )}
         
-        {/* Image indicators */}
+        {/* Gradient overlay at bottom for text readability */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/60 to-transparent"></div>
+        
+        {/* Image indicators - clickable for navigation */}
         {profile.images.length > 1 && (
-          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 flex gap-1">
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 flex gap-1.5 px-4">
             {profile.images.map((_, index) => (
-              <div
+              <button
                 key={index}
-                className={`w-2 h-2 rounded-full ${
-                  index === currentImageIndex ? "bg-white" : "bg-white/50"
+                onClick={() => setCurrentImageIndex(index)}
+                className={`rounded-full transition-all cursor-pointer backdrop-blur-sm ${
+                  index === currentImageIndex ? "bg-white/90 w-8 h-1" : "bg-white/40 w-6 h-1 hover:bg-white/60"
                 }`}
               />
             ))}
           </div>
         )}
 
+        {/* Verification Badge */}
+        <div className="absolute top-4 right-4 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full p-1.5 shadow-lg backdrop-blur-sm">
+          <CheckCircle2 className="w-5 h-5 text-white fill-white" />
+        </div>
+
+        {/* Image navigation arrows */}
+        {profile.images.length > 1 && (
+          <>
+            <button
+              onClick={() => setCurrentImageIndex((prev) => (prev - 1 + profile.images.length) % profile.images.length)}
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-9 h-9 bg-black/40 hover:bg-black/60 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all duration-200"
+            >
+              ‹
+            </button>
+            <button
+              onClick={() => setCurrentImageIndex((prev) => (prev + 1) % profile.images.length)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 w-9 h-9 bg-black/40 hover:bg-black/60 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all duration-200"
+            >
+              ›
+            </button>
+          </>
+        )}
+
         {/* Swipe overlay */}
         {isLiked !== null && (
-          <div className={`absolute inset-0 flex items-center justify-center ${
-            isLiked ? "bg-primary/80" : "bg-muted/80"
+          <div className={`absolute inset-0 flex items-center justify-center backdrop-blur-sm transition-all duration-300 ${
+            isLiked ? "bg-primary/30" : "bg-red-500/30"
           }`}>
-            <div className="text-white text-6xl">
-              {isLiked ? "🔫👆" : "🤘👇"}
+            <div className={`transition-all duration-300 ${isLiked ? "text-green-400 text-5xl font-bold" : "text-red-400 text-5xl font-bold"}`}>
+              {isLiked ? "♥" : "✕"}
             </div>
           </div>
         )}
-      </div>
 
-      {/* Profile Info */}
-      <div className="p-6 space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-2xl font-bold">{profile.name}, {profile.age}</h3>
+        {/* Bottom info gradient section */}
+        <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+          <div className="flex items-baseline gap-2">
+            <h3 className="text-3xl font-bold">{profile.name}</h3>
+            <span className="text-lg font-semibold text-white/80">{profile.age}</span>
+          </div>
+          {profile.last_active && (
+            <div className="text-sm text-white/80 mt-1">
+              {(() => {
+                const diff = Date.now() - new Date(profile.last_active).getTime();
+                if (diff < 60000) return "Online";
+                if (diff < 3600000) return `${Math.round(diff / 60000)}m ago`;
+                if (diff < 86400000) return `${Math.round(diff / 3600000)}h ago`;
+                return `${Math.round(diff / 86400000)}d ago`;
+              })()}
+            </div>
+          )}
           {profile.distance && (
-            <div className="flex items-center gap-1 text-muted-foreground">
+            <div className="flex items-center gap-1 text-white/90 mt-2 text-sm">
               <MapPin className="w-4 h-4" />
-              <span className="text-sm">{profile.distance}</span>
+              <span>{profile.distance}</span>
             </div>
           )}
         </div>
+      </div>
 
-        <div className="flex items-center gap-2 text-muted-foreground">
+      {/* Profile Info */}
+      <div className="p-5 space-y-4 bg-card border-t border-border/50">
+        <div className="flex items-center gap-2 text-muted-foreground text-sm">
           <GraduationCap className="w-4 h-4" />
-          <span>{profile.major} • {profile.year}</span>
+          <span className="font-medium">{profile.major}</span>
+          <span className="text-muted-foreground">•</span>
+          <span className="font-medium">{profile.year}</span>
         </div>
 
-        <p className="text-foreground/80 line-clamp-3">{profile.bio}</p>
+        {profile.bio && (
+          <p className="text-foreground/85 text-sm leading-relaxed line-clamp-3">{profile.bio}</p>
+        )}
 
         {/* Interests */}
-        <div className="flex flex-wrap gap-2">
-          {profile.interests.slice(0, 6).map((interest) => (
-            <Badge key={interest} variant="secondary" className="text-xs">
-              {interest}
-            </Badge>
-          ))}
-        </div>
+        {profile.interests.length > 0 && (
+          <div className="flex flex-wrap gap-2 pt-2">
+            {profile.interests.slice(0, 5).map((interest) => (
+              <Badge key={interest} variant="secondary" className="text-xs font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-all">
+                {interest}
+              </Badge>
+            ))}
+          </div>
+        )}
 
         {/* Action Buttons */}
-        <div className="flex justify-center gap-4 pt-4">
+        <div className="flex justify-center gap-6 pt-6">
           <Button
-            variant="swipe"
+            variant="outline"
             size="icon"
-            className="w-14 h-14 rounded-full border-destructive text-destructive hover:bg-destructive hover:text-destructive-foreground touch-target"
+            className="w-16 h-16 rounded-full border-2 border-muted-foreground/50 hover:border-destructive hover:bg-destructive/5 transition-all duration-200 touch-target shadow-lg hover:shadow-md"
             onClick={() => handleSwipe("left")}
           >
-            <span className="text-2xl">🤘👇</span>
+            <X className="w-6 h-6 text-muted-foreground hover:text-destructive transition-colors" />
           </Button>
           
           <Button
-            variant="hero"
             size="icon"
-            className="w-14 h-14 rounded-full touch-target"
+            className="w-16 h-16 rounded-full bg-gradient-primary hover:shadow-lg shadow-primary text-white font-bold touch-target transition-all duration-200 hover:scale-110"
             onClick={() => handleSwipe("right")}
           >
-            <span className="text-2xl">🔫👆</span>
+            <Heart className="w-6 h-6 fill-current" />
           </Button>
         </div>
       </div>

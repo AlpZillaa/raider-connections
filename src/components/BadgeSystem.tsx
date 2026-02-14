@@ -33,13 +33,14 @@ const tierColors = {
 
 const BadgeSystem = ({ badges, currentMatches, onToggleDisplay }: BadgeSystemProps) => {
   return (
-    <div className="space-y-6 p-4">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-primary">Achievement Collection</h2>
-        <p className="text-muted-foreground">Match Count: {currentMatches}</p>
-      </div>
+    <div className="min-h-screen overflow-y-auto pb-20 bg-background">
+      <div className="space-y-6 p-4">
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold text-primary">Achievement Collection</h2>
+          <p className="text-muted-foreground">Match Count: {currentMatches}</p>
+        </div>
 
-      <div className="grid gap-4">
+        <div className="grid gap-4">
         {badges.map((badge) => (
           <Card key={badge.id} className={`${badge.unlocked ? "" : "opacity-60"}`}>
             <CardHeader className="pb-3">
@@ -107,6 +108,7 @@ const BadgeSystem = ({ badges, currentMatches, onToggleDisplay }: BadgeSystemPro
             </CardContent>
           </Card>
         ))}
+        </div>
       </div>
     </div>
   );

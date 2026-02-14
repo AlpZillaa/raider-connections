@@ -57,6 +57,14 @@ export const useMatches = () => {
 
       if (!currentProfile) return;
 
+      // Get blocked users
+      const { data: blockedData } = await supabase
+        .from('blocked_users')
+        .select('blocked_id')
+        .eq('blocker_id', currentProfile.id);
+
+      const blockedIds = new Set(blockedData?.map(b => b.blocked_id) || []);
+
       // Fetch matches where user is either user1 or user2
       const { data, error } = await supabase
         .from('matches')
@@ -70,31 +78,38 @@ export const useMatches = () => {
 
       if (error) throw error;
 
-      // For each match, fetch the other user's profile
+      // For each match, fetch the other user's profile (excluding blocked users)
       const matchesWithProfiles = await Promise.all(
-        (data || []).map(async (match) => {
-          const otherUserId = match.user1_id === currentProfile.id 
-            ? match.user2_id 
-            : match.user1_id;
+        (data || [])
+          .filter(match => {
+            const otherUserId = match.user1_id === currentProfile.id 
+              ? match.user2_id 
+              : match.user1_id;
+            return !blockedIds.has(otherUserId);
+          })
+          .map(async (match) => {
+            const otherUserId = match.user1_id === currentProfile.id 
+              ? match.user2_id 
+              : match.user1_id;
 
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('id, display_name, profile_image_url, age, bio')
-            .eq('id', otherUserId)
-            .single();
+            const { data: profile } = await supabase
+              .from('profiles')
+              .select('id, display_name, profile_image_url, age, bio, last_active')
+              .eq('id', otherUserId)
+              .single();
 
-          return {
-            id: match.id,
-            matchedProfile: profile || {
-              id: otherUserId,
-              display_name: 'Unknown',
-              profile_image_url: null,
-              age: null,
-              bio: null,
-            },
-            created_at: match.created_at,
-          };
-        })
+            return {
+              id: match.id,
+              matchedProfile: profile || {
+                id: otherUserId,
+                display_name: 'Unknown',
+                profile_image_url: null,
+                age: null,
+                bio: null,
+              },
+              created_at: match.created_at,
+            };
+          })
       );
 
       setMatches(matchesWithProfiles);
